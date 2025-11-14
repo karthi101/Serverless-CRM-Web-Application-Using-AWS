@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Relationship Management (CRM)</title>
+    <!-- Inline empty favicon to prevent browser from requesting /favicon.ico -->
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            transition: background 0.5s;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #1e3a8a, #1e293b);
+            color: #e5e7eb;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            transition: background 0.5s, color 0.5s;
+        }
+
+        .container.dark-mode {
+            background: #1f2937;
+            color: #d1d5db;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a3c34;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            letter-spacing: 1px;
+        }
+
+        .dark-mode h1 {
+            color: #60a5fa;
+        }
+
+        .form-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: background 0.5s;
+        }
+
+        .dark-mode .form-section {
+            background: #374151;
+        }
+
+        .form-section input, .form-section select {
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1em;
+            flex: 1;
+            min-width: 180px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .dark-mode .form-section input, .dark-mode .form-section select {
+            background: #4b5563;
+            border-color: #6b7280;
+            color: #e5e7eb;
+        }
+
+        .form-section input:focus, .form-section select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        #addBtn {
+            background: #10b981;
+            color: white;
+        }
+
+        #addBtn:hover {
+            background: #059669;
+        }
+
+        #readBtn, #viewBtn, #exportBtn, #toggleThemeBtn {
+            background: #3b82f6;
+            color: white;
+        }
+
+        #readBtn:hover, #viewBtn:hover, #exportBtn:hover, #toggleThemeBtn:hover {
+            background: #2563eb;
+        }
+
+        #searchInput {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 20px;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .dark-mode #searchInput {
+            background: #4b5563;
+            border-color: #6b7280;
+            color: #e5e7eb;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            transition: background 0.5s;
+        }
+
+        .dark-mode table {
+            background: #1f2937;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            background: #1e3a8a;
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dark-mode th {
+            background: #1e40af;
+        }
+
+        td {
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            transition: background 0.3s;
+        }
+
+        .dark-mode td {
+            color: #d1d5db;
+            border-bottom: 1px solid #4b5563;
+        }
+
+        tr {
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        tr:hover {
+            background: #f3f4f6;
+            transform: scale(1.01);
+        }
+
+        .dark-mode tr:hover {
+            background: #374151;
+        }
+
+        .delete-btn, .edit-btn, .save-btn {
+            padding: 8px 15px;
+            border-radius: 6px;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .delete-btn {
+            background: #ef4444;
+        }
+
+        .delete-btn:hover {
+            background: #dc2626;
+        }
+
+        .edit-btn {
+            background: #f59e0b;
+            margin-right: 10px;
+        }
+
+        .edit-btn:hover {
+            background: #d97706;
+        }
+
+        .save-btn {
+            background: #10b981;
+        }
+
+        .save-btn:hover {
+            background: #059669;
+        }
+
+        .status-active {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .status-inactive {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        .status-unknown {
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .message {
+            text-align: center;
+            margin: 20px 0;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none;
+            transition: opacity 0.3s;
+        }
+
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .customer-details {
+            margin: 25px 0;
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: none;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .dark-mode .customer-details {
+            background: #374151;
+        }
+
+        .customer-details.active {
+            display: block;
+        }
+
+        .customer-details h2 {
+            color: #1a3c34;
+            font-size: 1.6em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .dark-mode .customer-details h2 {
+            color: #60a5fa;
+        }
+
+        .customer-details p {
+            margin: 8px 0;
+            color: #4b5563;
+            font-size: 1.1em;
+        }
+
+        .dark-mode .customer-details p {
+            color: #d1d5db;
+        }
+
+        .customer-details p strong {
+            color: #1f2937;
+        }
+
+        .dark-mode .customer-details p strong {
+            color: #e5e7eb;
+        }
+
+        .profile-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .dark-mode .profile-card {
+            background: #1f2937;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            background: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: background 0.3s;
+        }
+
+        .profile-info h3 {
+            margin: 0;
+            color: #1a3c34;
+            font-size: 1.3em;
+        }
+
+        .dark-mode .profile-info h3 {
+            color: #60a5fa;
+        }
+
+        .profile-info p {
+            margin: 5px 0 0;
+            color: #6b7280;
+            font-size: 0.95em;
+        }
+
+        .dark-mode .profile-info p {
+            color: #9ca3af;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Customer Relationship Management (CRM)</h1>
+
+        <!-- Form to Add Customers -->
+        <div class="form-section">
+            <input type="text" id="customerID" placeholder="Customer ID (e.g., C001)" required>
+            <input type="text" id="name" placeholder="Name (e.g., John Doe)" required>
+            <input type="email" id="email" placeholder="Email (e.g., john@example.com)" required>
+            <input type="text" id="phone" placeholder="Phone (e.g., 555-123-4567)" required>
+            <input type="text" id="company" placeholder="Company (e.g., TechCorp)" required>
+            <select id="status" required>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+            </select>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button id="addBtn" onclick="addCustomer()">Add Customer</button>
+            <button id="readBtn" onclick="fetchCustomers()">View All Customers</button>
+            <button id="exportBtn" onclick="exportToCSV()">Export to CSV</button>
+            <button id="toggleThemeBtn" onclick="toggleTheme()">Toggle Dark Mode</button>
+        </div>
+
+        <!-- Search Bar -->
+        <input type="text" id="searchInput" placeholder="Search customers by name or ID..." onkeyup="searchCustomers()">
+
+        <!-- Form to View Customer Details -->
+        <div class="form-section">
+            <input type="text" id="viewCustomerID" placeholder="Enter Customer ID (e.g., C001)">
+            <button id="viewBtn" onclick="viewCustomerDetails()">View Customer Details</button>
+        </div>
+
+        <!-- Message Display -->
+        <div id="message" class="message"></div>
+
+        <!-- Customer Details Display with Profile Card -->
+        <div id="customerDetails" class="customer-details">
+            <div class="profile-card">
+                <div class="avatar" id="avatarInitial"></div>
+                <div class="profile-info">
+                    <h3 id="detailName"></h3>
+                    <p>ID: <span id="detailCustomerID"></span></p>
+                </div>
+            </div>
+            <p><strong>Email:</strong> <span id="detailEmail"></span></p>
+            <p><strong>Phone:</strong> <span id="detailPhone"></span></p>
+            <p><strong>Company:</strong> <span id="detailCompany"></span></p>
+            <p><strong>Status:</strong> <span id="detailStatus"></span></p>
+        </div>
+
+        <!-- Table to Display All Customers -->
+        <table id="customerTable">
+            <thead>
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Company</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="customerBody">
+                <!-- Customer items will be populated here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Include Axios for HTTP requests -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        // Replace with your actual API Gateway Invoke URL
+        const API_URL = "https:"Replace with your actual API Gateway Invoke URL";
+        let allCustomers = [];
+
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById("message");
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = "block";
+            setTimeout(() => {
+                messageDiv.style.display = "none";
+            }, 3000);
+        }
+
+        async function addCustomer() {
+            const customerID = document.getElementById("customerID").value;
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const phone = document.getElementById("phone").value;
+            const company = document.getElementById("company").value;
+            const status = document.getElementById("status").value;
+
+            if (!customerID || !name || !email || !phone || !company || !status) {
+                showMessage("Please fill in all fields correctly.", "error");
+                return;
+            }
+
+            const customer = { customerID, name, email, phone, company, status };
+
+            try {
+                await axios.post(`${API_URL}/add-customer`, customer);
+                showMessage("Customer added successfully!", "success");
+                document.getElementById("customerID").value = "";
+                document.getElementById("name").value = "";
+                document.getElementById("email").value = "";
+                document.getElementById("phone").value = "";
+                document.getElementById("company").value = "";
+                document.getElementById("status").value = "Active";
+                fetchCustomers();
+            } catch (error) {
+                console.error("Error adding customer:", error);
+                showMessage("Failed to add customer. Check the console for details.", "error");
+            }
+        }
+
+        async function fetchCustomers() {
+            try {
+                const response = await axios.get(`${API_URL}/get-all-customers`);
+                allCustomers = response.data.customers || []; // Fallback to empty array if undefined
+                displayCustomers(allCustomers);
+            } catch (error) {
+                console.error("Error fetching customers:", error);
+                showMessage("Failed to fetch customers. Check the console for details.", "error");
+            }
+        }
+
+        function displayCustomers(customers) {
+            const tbody = document.getElementById("customerBody");
+            tbody.innerHTML = "";
+
+            customers.forEach(customer => {
+                const status = customer.status || "Unknown"; // Fallback for undefined status
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${customer.customerID}</td>
+                    <td contenteditable="false" class="editable" data-field="name">${customer.name}</td>
+                    <td contenteditable="false" class="editable" data-field="email">${customer.email}</td>
+                    <td contenteditable="false" class="editable" data-field="phone">${customer.phone}</td>
+                    <td contenteditable="false" class="editable" data-field="company">${customer.company}</td>
+                    <td class="status-${status.toLowerCase()}">${status}</td>
+                    <td>
+                        <button class="edit-btn" onclick="editCustomer(this, '${customer.customerID}')">Edit</button>
+                        <button class="save-btn" style="display:none;" onclick="saveCustomer(this, '${customer.customerID}')">Save</button>
+                        <button class="delete-btn" onclick="deleteCustomer('${customer.customerID}')">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        async function deleteCustomer(customerID) {
+            if (confirm(`Are you sure you want to delete customer ${customerID}?`)) {
+                try {
+                    await axios.delete(`${API_URL}/delete-customer?customerID=${customerID}`);
+                    showMessage("Customer deleted successfully!", "success");
+                    fetchCustomers();
+                } catch (error) {
+                    console.error("Error deleting customer:", error);
+                    showMessage("Failed to delete customer. Check the console for details.", "error");
+                }
+            }
+        }
+
+        async function viewCustomerDetails() {
+            const customerID = document.getElementById("viewCustomerID").value.trim();
+
+            if (!customerID) {
+                showMessage("Please enter a Customer ID.", "error");
+                return;
+            }
+
+            try {
+                const response = await axios.get(`${API_URL}/get-customer?customerID=${customerID}`);
+                const customer = response.data;
+
+                if (response.status === 200 && customer.customerID) {
+                    document.getElementById("detailCustomerID").textContent = customer.customerID;
+                    document.getElementById("detailName").textContent = customer.name;
+                    document.getElementById("detailEmail").textContent = customer.email;
+                    document.getElementById("detailPhone").textContent = customer.phone;
+                    document.getElementById("detailCompany").textContent = customer.company;
+                    document.getElementById("detailStatus").textContent = customer.status || "Unknown";
+                    const initial = customer.name.charAt(0).toUpperCase();
+                    document.getElementById("avatarInitial").textContent = initial;
+                    document.getElementById("customerDetails").classList.add("active");
+                    showMessage("Customer details retrieved successfully!", "success");
+                } else {
+                    document.getElementById("customerDetails").classList.remove("active");
+                    showMessage("Customer not found.", "error");
+                }
+            } catch (error) {
+                console.error("Error fetching customer details:", error);
+                document.getElementById("customerDetails").classList.remove("active");
+                showMessage("Failed to fetch customer details. Check the console for details.", "error");
+            }
+        }
+
+        function searchCustomers() {
+            const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+            const filteredCustomers = allCustomers.filter(customer =>
+                (customer.name && customer.name.toLowerCase().includes(searchTerm)) ||
+                (customer.customerID && customer.customerID.toLowerCase().includes(searchTerm))
+            );
+            displayCustomers(filteredCustomers);
+        }
+
+        function editCustomer(button, customerID) {
+            const row = button.parentElement.parentElement;
+            const editableCells = row.querySelectorAll(".editable");
+            editableCells.forEach(cell => cell.contentEditable = true);
+            button.style.display = "none";
+            row.querySelector(".save-btn").style.display = "inline";
+        }
+
+        async function saveCustomer(button, customerID) {
+            const row = button.parentElement.parentElement;
+            const editableCells = row.querySelectorAll(".editable");
+            const updatedCustomer = {
+                customerID,
+                name: row.querySelector("[data-field='name']").textContent,
+                email: row.querySelector("[data-field='email']").textContent,
+                phone: row.querySelector("[data-field='phone']").textContent,
+                company: row.querySelector("[data-field='company']").textContent,
+                status: row.cells[5].textContent
+            };
+
+            try {
+                await axios.put(`${API_URL}/update-customer`, updatedCustomer);
+                editableCells.forEach(cell => cell.contentEditable = false);
+                button.style.display = "none";
+                row.querySelector(".edit-btn").style.display = "inline";
+                showMessage("Customer updated successfully!", "success");
+                fetchCustomers();
+            } catch (error) {
+                console.error("Error updating customer:", error);
+                showMessage("Failed to update customer. Check the console for details.", "error");
+            }
+        }
+
+        function exportToCSV() {
+            const headers = ["Customer ID", "Name", "Email", "Phone", "Company", "Status"];
+            const rows = allCustomers.map(customer => [
+                customer.customerID,
+                customer.name,
+                customer.email,
+                customer.phone,
+                customer.company,
+                customer.status || "Unknown"
+            ]);
+            const csvContent = [headers, ...rows].map(row => row.join(",")).join("\n");
+            const blob = new Blob([csvContent], { type: "text/csv" });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "customers.csv";
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle("dark-mode");
+            document.querySelector(".container").classList.toggle("dark-mode");
+        }
+
+        window.onload = fetchCustomers;
+    </script>
+</body>
+</html>
